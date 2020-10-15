@@ -196,13 +196,9 @@ class sirm (Datasets):
     def __init__(self, root_path):
         super().__init__(root_path)
         self.dataset_path = "COVID-19 Radiography Database"
-        self.csv_path = [os.path.join(self.dataset_path, "COVID-19.metadata.xlsx"),
-                         os.path.join(self.dataset_path, "NORMAL.metadata.xlsx"),
-                         os.path.join(self.dataset_path, "Viral Pneumonia.matadata.xlsx")]
-        self.img_path = [os.path.join(self.dataset_path, "COVID-19"),
-                         os.path.join(self.dataset_path, "NORMAL"),
-                         os.path.join(self.dataset_path, "Viral Pneumonia")]
-        self.available_classes = ["COVID-19", "NORMAL", "Viral Pneumonia"]
+        self.csv_path = [os.path.join(self.dataset_path, "COVID-19.metadata.xlsx")]
+        self.img_path = [os.path.join(self.dataset_path, "COVID-19")]
+        self.available_classes = ["COVID-19"]
 
     def read(self):
         csv_list = []
@@ -216,10 +212,6 @@ class sirm (Datasets):
         filename_tag = self.csv["FILE NAME"][idx]
         if "COVID-19" in filename_tag:
             fileslist = os.listdir(os.path.join(self.dataset_root_path, self.img_path[0]))
-        elif "NORMAL" in filename_tag:
-            fileslist = os.listdir(os.path.join(self.dataset_root_path, self.img_path[1]))
-        elif "Viral Pneumonia" in filename_tag:
-            fileslist = os.listdir(os.path.join(self.dataset_root_path, self.img_path[2]))
         for f in fileslist:
             if filename_tag in f.replace(' ', ''): #remove espaco do nome do arquivo
                 return f
