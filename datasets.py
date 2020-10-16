@@ -4,6 +4,8 @@ import logging
 from abc import ABC, abstractmethod
 import time
 
+from ds_utils import mount_count_table
+
 class Datasets(ABC):
     def __init__(self, root_path=None):
         super().__init__()
@@ -63,11 +65,7 @@ class Datasets(ABC):
         return target_path
 
     def mount_count_table(self):
-        for row in self.table:
-            if row["class"] not in self.count_table:
-                self.count_table[row["class"]] = 1
-            else:
-                self.count_table[row["class"]] += 1
+        self.count_table = mount_count_table(self.table)
 
 class cohen (Datasets):
     def __init__(self, root_path):
