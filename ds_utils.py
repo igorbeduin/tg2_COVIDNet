@@ -29,11 +29,18 @@ def filter_table(table, target_classes, remove_classes, mapping):
                 row["class"] = mapping["std"]     
     for row in rows_to_be_rmvd:
         table.remove(row)
+    count_table = mount_count_table(table)
+    return table, count_table
+
+def mount_count_table(table):
+    count_table = {}
     for row in table:
         if row["class"] not in count_table:
             count_table[row["class"]] = 1
         else:
             count_table[row["class"]] += 1
+    return count_table
+
 def split_table(table, split_ratio):
     random.shuffle(table)
     split_idx = int(split_ratio * len(table))
