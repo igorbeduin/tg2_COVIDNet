@@ -1,5 +1,6 @@
 import os
 import shutil
+import random
 
 def mount_dataset(dst_path, table):
     if not os.path.isdir(dst_path):
@@ -34,6 +35,12 @@ def filter_dataset(table, target_classes, remove_classes, mapping):
             count_table[row["class"]] = 1
         else:
             count_table[row["class"]] += 1
+def split_table(table, split_ratio):
+    random.shuffle(table)
+    split_idx = int(split_ratio * len(table))
+    train_table = table[split_idx:]
+    test_table = table[:split_idx]
+    return train_table, test_table
 
     return table, count_table
 
