@@ -48,7 +48,11 @@ def split_table(table, split_ratio):
     test_table = table[:split_idx]
     return train_table, test_table
 
-    return table, count_table
+def print_table_info(table, count_table=None):
+    if count_table is None:
+        count_table = mount_count_table(table)
+    print(f"Total de imagens: {len(table)}")
+    print(f"Contagem de cada classe por dataset: {count_table}")
 
 if __name__ == "__main__":
     pass
