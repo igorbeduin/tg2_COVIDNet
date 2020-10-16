@@ -25,14 +25,18 @@ class Datasets(ABC):
         try:
             self.csv = pd.read_csv(os.path.join(self.dataset_root_path, self.csv_path), 
                        encoding=self.encoding, nrows=None)
-            self.count = len(self.csv)
+            self.update_count()
         except ValueError:
             logging.error("Path to the CSV file not defined")
             exit()
     
-    def filter(self):
+    def prefilter(self):
         for filter_method in self.filter_methods:
             filter_method()
+        self.update_count()
+
+    def update_count(self):
+        self.count = len(self.csv)
 
     def mount_table(self):
         table = []
