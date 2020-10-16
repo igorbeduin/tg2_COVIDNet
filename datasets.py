@@ -70,11 +70,10 @@ class Datasets(ABC):
                 self.count_table[row["class"]] += 1
 
 class cohen (Datasets):
-    #TODO:
-    # - mapping das classes
-
     def __init__(self, root_path):
         super().__init__(root_path)
+        self.__name__ = "cohen"
+
         self.dataset_path = "covid-chestxray-dataset"
         self.csv_path = os.path.join(self.dataset_path, "metadata.csv")
         self.img_path = os.path.join(self.dataset_path, "images")
@@ -101,11 +100,10 @@ class cohen (Datasets):
         return target_path
 
 class actualmed (Datasets):
-    # TODO:
-    # - mapping das classes
-
     def __init__(self, root_path):
         super().__init__(root_path)
+        self.__name__ = "actualmed"
+
         self.dataset_path = "Actualmed-COVID-chestxray-dataset"
         self.csv_path = os.path.join(self.dataset_path, "metadata.csv")
         self.img_path = os.path.join(self.dataset_path, "images")
@@ -123,11 +121,10 @@ class actualmed (Datasets):
         return target_path
 
 class fig1 (Datasets):
-    # TODO:
-    # - mapping das classes
-
     def __init__(self, root_path):
         super().__init__(root_path)
+        self.__name__ = "fig1"
+        
         self.encoding = 'ISO-8859-1'
         self.dataset_path = "Figure1-COVID-chestxray-dataset"
         self.csv_path = os.path.join(self.dataset_path, "metadata.csv")
@@ -150,11 +147,10 @@ class fig1 (Datasets):
 
 
 class rsna (Datasets):
-    # TODO:
-    # - mapping das classes
-
     def __init__(self, root_path):
         super().__init__(root_path)
+        self.__name__ = "rsna"
+
         self.dataset_path = "rsna-pneumonia-detection-challenge"
         self.csv_path = [os.path.join(self.dataset_path, "stage_2_detailed_class_info.csv"),
                          os.path.join(self.dataset_path, "stage_2_train_labels.csv")]
@@ -194,11 +190,10 @@ class rsna (Datasets):
         
 
 class sirm (Datasets):
-    # TODO:
-    # - mapping das classes
-
     def __init__(self, root_path):
         super().__init__(root_path)
+        self.__name__ = "sirm"
+
         self.dataset_path = "COVID-19 Radiography Database"
         self.csv_path = [os.path.join(self.dataset_path, "COVID-19.metadata.xlsx")]
         self.img_path = [os.path.join(self.dataset_path, "COVID-19")]
@@ -241,6 +236,3 @@ if __name__ == "__main__":
     sirm.mount_table()
 
     for item in sirm.table: print(item["filename"])
-
-    # for item in cohen.count_table: print(f"{item}: {cohen.count_table[item]}")
-    # print(len(cohen.count_table))
