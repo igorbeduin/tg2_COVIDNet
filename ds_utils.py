@@ -16,9 +16,8 @@ def mount_dataset(dst_path, table):
             filename = row["filename"]
             print(f"Fail trying to copy file {filename}")
 
-def filter_dataset(table, target_classes, remove_classes, mapping):
+def filter_table(table, target_classes, remove_classes, mapping):
     rows_to_be_rmvd = []
-    count_table = {}
 
     for row in table:
         if str(row["class"]) in remove_classes:
