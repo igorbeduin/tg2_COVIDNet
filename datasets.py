@@ -220,7 +220,11 @@ class rsna (Datasets):
     def solve_target_path(self, idx):
         target_path = os.path.join(self.dataset_root_path, self.img_path)
         return target_path
-        
+
+    def remove_unknown(self):
+        aux1_csv = self.csv[self.csv["class"] == "Normal"]
+        aux2_csv = self.csv[self.csv["Target"] == 1]
+        self.csv = pd.concat([aux1_csv, aux2_csv], ignore_index=True)
 
     def find_id(self, idx):
         patientid = self.csv["patientId"][idx]
@@ -264,8 +268,21 @@ class sirm (Datasets):
         filename_tag = self.csv["FILE NAME"][idx]
         for finding in self.available_classes:
             if finding in filename_tag:
-                idx = self.available_classes.index(finding)
-                return os.path.join(self.dataset_root_path, self.img_path[idx])
+    def discard_targets(self):
+        rows_to_remove = []
+        discard = ['100', '101', '102', '103', '104', '105',
+                   '110', '111', '112', '113', '122', '123',
+                   '124', '125', '126', '217']
+        for row in self.table:
+            for n in discard:
+                if n in row["filename"]:
+                    rows_to_remove.append(row)
+        for row in rows_to_remove:
+            self.table.remove(row)
+
+    def find_id(self, idx):
+        patientid = self.csv["FILE NAME"][idx]
+        return patientid
     
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(), "datasets")
