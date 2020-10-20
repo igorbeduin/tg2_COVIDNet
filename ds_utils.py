@@ -14,11 +14,23 @@ def mount_dataset(dst_path, table):
         if not os.path.isdir(target_path):
             os.mkdir(target_path)
         file_path = os.path.join(row["path"], row["filename"])
-        try:
-            shutil.copy2(file_path, target_path)
-        except:
-            filename = row["filename"]
-            print(f"Fail trying to copy file {filename}")
+        if ".dcm" not in row["filename"]:
+            try:
+                shutil.copy2(file_path, target_path)
+            except:
+                filename = row["filename"]
+                print(f"Fail trying to copy file {filename}")
+        else:
+            image = dcmread(file_path)
+            pixel_array_numpy = image.pixel_array
+            new_filename = row["filename"].replace(".dcm", ".png")
+            try:
+                # cv2.imshow("window", pixel_array_numpy)
+                # cv2.waitKey()
+                cv2.imwrite(os.path.join(target_path, new_filename), pixel_array_numpy)
+            except:
+                filename = row["filename"]
+                print(f"Fail trying to write DCM file {filename}")
 
 def filter_table(table, target_classes, remove_classes, mapping):
     rows_to_be_rmvd = []
