@@ -55,11 +55,11 @@ class Datasets(ABC):
             filename = self.find_filename(idx)
             finding = self.find_image_class(idx)
             target_path = self.solve_target_path(idx)
-            table_row = {"path": target_path, "filename": filename, "class": finding}
+            url = self.find_img_url(idx)
+            patientid = self.find_id(idx)
+            table_row = {"path": target_path, "filename": filename, "class": finding, "url": url, "id": patientid}
             table.append(table_row)
         self.table = table
-        self.mount_count_table()
-        self.classes_count = len(self.count_table)
 
     def find_filename(self, idx):
         filename = ""
@@ -69,12 +69,34 @@ class Datasets(ABC):
         finding = ""
         return finding
 
+    def find_id(self, idx):
+        patientid = self.csv["patientid"][idx]
+        return patientid
+
     def solve_target_path(self, idx):
         target_path = ""
         return target_path
 
     def mount_count_table(self):
         self.count_table = mount_count_table(self.table)
+        self.classes_count = len(self.count_table)
+
+    def find_img_url(self, idx):
+        if "url" in self.csv:
+            url_column = self.csv["url"]
+        if "URL" in self.csv:
+            url_column = self.csv["URL"]
+        try:
+            url = url_column[idx]
+        except:
+            url = None
+        return url
+
+    def update(self):
+        self.mount_count_table()
+        self.update_count()
+            
+        
 
 class cohen (Datasets):
     def __init__(self, root_path):
@@ -198,6 +220,11 @@ class rsna (Datasets):
     def solve_target_path(self, idx):
         target_path = os.path.join(self.dataset_root_path, self.img_path)
         return target_path
+        
+
+    def find_id(self, idx):
+        patientid = self.csv["patientId"][idx]
+        return patientid
         
 
 class sirm (Datasets):
