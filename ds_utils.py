@@ -71,7 +71,7 @@ def split_table(table, split_ratio):
     test_table = new_table[:split_idx]
     return train_table, test_table
 
-def print_table_info(table, count_table=None):
+def table_info(table, count_table=None):
     if count_table is None:
         count_table = mount_count_table(table)
     print(f"Total de imagens: {len(table)}")
