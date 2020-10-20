@@ -32,21 +32,26 @@ def mount_dataset(dst_path, table):
                 filename = row["filename"]
                 print(f"Fail trying to write DCM file {filename}")
 
-def filter_table(table, target_classes, remove_classes, mapping):
-    rows_to_be_rmvd = []
-
-    for row in table:
-        if str(row["class"]) in remove_classes:
-            rows_to_be_rmvd.append(row)
-        elif str(row["class"]) not in target_classes:
-            if str(row["class"]) in mapping:
-                row["class"] = mapping[row["class"]]
+def filter_table(table, mapping, remove_classes=None, general_case="subst"):
+    new_table = []
+    new_table = table.copy()
+    rows_to_remove = []
+    for row in new_table:
+        if str(row["class"]) in mapping:
+            row["class"] = mapping[str(row["class"])]
+        elif remove_classes is None:
+            if general_case == "subst":
+                row["class"] = mapping["std_subst"]
+            elif general_case == "remove":
+                rows_to_remove.append(row)
+        else:
+            if str(row["class"]) in remove_classes:
+                rows_to_remove.append(row)
             else:
-                row["class"] = mapping["std"]     
-    for row in rows_to_be_rmvd:
-        table.remove(row)
-    count_table = mount_count_table(table)
-    return table, count_table
+                row["class"] = mapping["std_subst"]
+    for row in rows_to_remove:
+        new_table.remove(row)
+    return new_table
 
 def mount_count_table(table):
     count_table = {}
