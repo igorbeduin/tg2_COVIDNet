@@ -214,7 +214,7 @@ class rsna (Datasets):
         target = self.csv["Target"][idx]
         if finding == "Normal":
             return finding
-        elif target == "1":
+        elif target == 1:
             return target
 
     def solve_target_path(self, idx):
