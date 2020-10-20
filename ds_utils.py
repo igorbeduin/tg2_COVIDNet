@@ -63,10 +63,12 @@ def mount_count_table(table):
     return count_table
 
 def split_table(table, split_ratio):
-    random.shuffle(table)
-    split_idx = int(split_ratio * len(table))
-    train_table = table[split_idx:]
-    test_table = table[:split_idx]
+    new_table = []
+    new_table = table.copy()
+    random.shuffle(new_table)
+    split_idx = int(split_ratio * len(new_table))
+    train_table = new_table[split_idx:]
+    test_table = new_table[:split_idx]
     return train_table, test_table
 
 def print_table_info(table, count_table=None):
