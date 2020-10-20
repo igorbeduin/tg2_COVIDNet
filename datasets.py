@@ -16,7 +16,8 @@ class Datasets(ABC):
         self.count = 0
         self.csv_path = None
         self.encoding = None
-        self.filter_methods = []
+        self.prefilter_methods = []
+        self.postfilter_methods = []
         self.table = []
         self.count_table = {}
         self.classes_count = 0
@@ -33,7 +34,12 @@ class Datasets(ABC):
             exit()
     
     def prefilter(self):
-        for filter_method in self.filter_methods:
+        for filter_method in self.prefilter_methods:
+            filter_method()
+        self.update_count()
+
+    def postfilter(self):
+        for filter_method in self.postfilter_methods:
             filter_method()
         self.update_count()
 
@@ -76,7 +82,7 @@ class cohen (Datasets):
         self.csv_path = os.path.join(self.dataset_path, "metadata.csv")
         self.img_path = os.path.join(self.dataset_path, "images")
         
-        self.filter_methods = [self.select_views]
+        self.prefilter_methods = [self.select_views]
 
     def select_views(self, views=None):
         if views is None:
@@ -144,6 +150,8 @@ class fig1 (Datasets):
         return target_path
 
 
+
+
 class rsna (Datasets):
     def __init__(self, root_path):
         super().__init__(root_path)
@@ -153,6 +161,8 @@ class rsna (Datasets):
         self.csv_path = [os.path.join(self.dataset_path, "stage_2_detailed_class_info.csv"),
                          os.path.join(self.dataset_path, "stage_2_train_labels.csv")]
         self.img_path = os.path.join(self.dataset_path, "stage_2_train_images")
+
+        self.prefilter_methods = [self.remove_unknown]
 
     def read(self):
         csv_list = []
@@ -196,6 +206,7 @@ class sirm (Datasets):
         self.csv_path = [os.path.join(self.dataset_path, "COVID-19.metadata.xlsx")]
         self.img_path = [os.path.join(self.dataset_path, "COVID-19")]
         self.available_classes = ["COVID-19"]
+        self.postfilter_methods = [self.discard_targets]
 
     def read(self):
         csv_list = []
