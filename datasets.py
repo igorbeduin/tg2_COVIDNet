@@ -232,42 +232,37 @@ class rsna (Datasets):
         
 
 class sirm (Datasets):
+    """
+    ATENCAO: apenas "COVID-19.metadata.xlsx" sendo utilizado
+    """
     def __init__(self, root_path):
         super().__init__(root_path)
         self.__name__ = "sirm"
 
         self.dataset_path = "COVID-19 Radiography Database"
-        self.csv_path = [os.path.join(self.dataset_path, "COVID-19.metadata.xlsx")]
-        self.img_path = [os.path.join(self.dataset_path, "COVID-19")]
-        self.available_classes = ["COVID-19"]
+        self.csv_path = os.path.join(self.dataset_path, "COVID-19.metadata.xlsx")
+        self.img_path = os.path.join(self.dataset_path, "COVID-19")
+
         self.postfilter_methods = [self.discard_targets]
 
     def read(self):
-        csv_list = []
-        for csv_path in self.csv_path:
-            df = pd.read_excel(os.path.join(self.dataset_root_path, csv_path))
-            csv_list.append(df)
-        self.csv = pd.concat(csv_list, ignore_index=True)
+        self.csv = pd.read_excel(os.path.join(self.dataset_root_path, self.csv_path))
         self.count = len(self.csv)
 
     def find_filename(self, idx):
         filename_tag = self.csv["FILE NAME"][idx]
-        if "COVID-19" in filename_tag:
-            fileslist = os.listdir(os.path.join(self.dataset_root_path, self.img_path[0]))
+        fileslist = os.listdir(os.path.join(self.dataset_root_path, self.img_path))
         for f in fileslist:
             if filename_tag in f.replace(' ', ''): #remove espaco do nome do arquivo
                 return f
 
     def find_image_class(self, idx):
-        filename_tag = self.csv["FILE NAME"][idx]
-        for finding in self.available_classes:
-            if finding in filename_tag:
-                return finding
+        return "COVID-19"
 
     def solve_target_path(self, idx):
-        filename_tag = self.csv["FILE NAME"][idx]
-        for finding in self.available_classes:
-            if finding in filename_tag:
+        target_path = os.path.join(self.dataset_root_path, self.img_path)
+        return target_path
+
     def discard_targets(self):
         rows_to_remove = []
         discard = ['100', '101', '102', '103', '104', '105',
