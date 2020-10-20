@@ -44,7 +44,10 @@ class Datasets(ABC):
         self.update_count()
 
     def update_count(self):
-        self.count = len(self.csv)
+        if self.table:
+            self.count = len(self.table)
+        else:
+            self.count = len(self.csv)
 
     def mount_table(self):
         table = []
