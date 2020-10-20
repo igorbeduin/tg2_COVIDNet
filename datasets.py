@@ -286,9 +286,10 @@ class sirm (Datasets):
     
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(), "datasets")
-    sirm = sirm(path)
+    cohen = cohen(path)
     
-    sirm.read()
-    sirm.mount_table()
+    cohen.read()
+    cohen.prefilter()
+    cohen.mount_table()
+    for item in cohen.table: print(item["url"])
 
-    for item in sirm.table: print(item["filename"])
