@@ -8,6 +8,9 @@ from ds_utils import mount_count_table
 
 class Datasets(ABC):
     def __init__(self, root_path=None):
+        """
+        Instancia deve ser construída recebendo como argumento o root path onde o dataset está localizado.
+        """
         super().__init__()
         if root_path is None:
             self.dataset_root_path = "./datasets"
