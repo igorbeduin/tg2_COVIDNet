@@ -7,6 +7,7 @@ from pydicom import dcmread
 
 
 def mount_dataset(dst_path, table):
+    count = 0
     if not os.path.isdir(dst_path):
         os.mkdir(dst_path)
     for row in table:
@@ -17,6 +18,7 @@ def mount_dataset(dst_path, table):
         if ".dcm" not in row["filename"]:
             try:
                 shutil.copy2(file_path, target_path)
+                count += 1
             except:
                 filename = row["filename"]
                 print(f"Fail trying to copy file {filename}")
@@ -28,9 +30,11 @@ def mount_dataset(dst_path, table):
                 # cv2.imshow("window", pixel_array_numpy)
                 # cv2.waitKey()
                 cv2.imwrite(os.path.join(target_path, new_filename), pixel_array_numpy)
+                count += 1
             except:
                 filename = row["filename"]
                 print(f"Fail trying to write DCM file {filename}")
+    print(f"{count} imagens escritas no dataset.")
 
 def filter_table(table, mapping, remove_classes=None, general_case="subst"):
     new_table = []
