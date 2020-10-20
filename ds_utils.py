@@ -77,5 +77,19 @@ def table_info(table, count_table=None):
     print(f"Total de imagens: {len(table)}")
     print(f"Contagem de cada classe por dataset: {count_table}")
 
+
+def remove_dupl_field(dataset_target, dataset_compare, field):
+    row_to_remove = []
+    table = dataset_target.table.copy()
+    compared_col = [item[field] for item in dataset_compare.table]
+    for row in table:
+        if row[field] is not None and row[field] in compared_col:
+            row_to_remove.append(row)
+    for row in row_to_remove:
+        table.remove(row)
+    dataset_target.table = table
+    dataset_target.update()
+
+
 if __name__ == "__main__":
     pass
