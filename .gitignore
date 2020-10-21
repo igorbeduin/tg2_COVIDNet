@@ -7,3 +7,5 @@ example.log
 
 target_dataset/
 .markdownlint.json
+
+*.pem
