@@ -14,26 +14,32 @@ def mount_dataset(dst_path, table):
         target_path = os.path.join(dst_path, str(row["class"]))
         if not os.path.isdir(target_path):
             os.mkdir(target_path)
-        file_path = os.path.join(row["path"], row["filename"])
-        if ".dcm" not in row["filename"]:
+        filename = row["filename"]
+        file_path = os.path.join(row["path"], filename)
+        if ".dcm" not in filename:
             try:
                 shutil.copy2(file_path, target_path)
                 count += 1
             except:
-                filename = row["filename"]
                 print(f"Fail trying to copy file {filename}")
         else:
             image = dcmread(file_path)
             pixel_array_numpy = image.pixel_array
-            new_filename = row["filename"].replace(".dcm", ".png")
+            for dim in pixel_array_numpy.shape:
+                if dim == 0:
+                    print(f"ERRO GRAVE: {filename}") 
+            filename = row["filename"].replace(".dcm", ".png")
             try:
                 # cv2.imshow("window", pixel_array_numpy)
                 # cv2.waitKey()
-                cv2.imwrite(os.path.join(target_path, new_filename), pixel_array_numpy)
+                success_dcm_conv = cv2.imwrite(os.path.join(target_path, filename), pixel_array_numpy)
+                if not success_dcm_conv:
+                    print(f"ERRO GRAVE: {filename}")        
                 count += 1
             except:
-                filename = row["filename"]
                 print(f"Fail trying to write DCM file {filename}")
+        if filename not in os.listdir(target_path):
+            print(f"ERRO GRAVE: {filename}")
     print(f"{count} imagens escritas no dataset.")
 
 def filter_table(table, mapping, remove_classes=None, general_case="subst"):
