@@ -9,3 +9,7 @@ target_dataset/
 .markdownlint.json
 
 *.pem
+auto_model/graph
+auto_model/oracle.json
+auto_model/trial_7972670a57632b0fcb7596b33058030b/pipeline
+auto_model/trial_7972670a57632b0fcb7596b33058030b/trial.json
