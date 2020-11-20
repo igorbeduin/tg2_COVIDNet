@@ -25,21 +25,12 @@ def mount_dataset(dst_path, table):
         else:
             image = dcmread(file_path)
             pixel_array_numpy = image.pixel_array
-            for dim in pixel_array_numpy.shape:
-                if dim == 0:
-                    print(f"ERRO GRAVE: {filename}") 
             filename = row["filename"].replace(".dcm", ".png")
-            try:
-                # cv2.imshow("window", pixel_array_numpy)
-                # cv2.waitKey()
-                success_dcm_conv = cv2.imwrite(os.path.join(target_path, filename), pixel_array_numpy)
-                if not success_dcm_conv:
-                    print(f"ERRO GRAVE: {filename}")        
+            try:       
+                cv2.imwrite(os.path.join(target_path, filename), pixel_array_numpy)
                 count += 1
             except:
                 print(f"Fail trying to write DCM file {filename}")
-        if filename not in os.listdir(target_path):
-            print(f"ERRO GRAVE: {filename}")
     print(f"{count} imagens escritas no dataset.")
 
 def filter_table(table, mapping, remove_classes=None, general_case="subst"):
@@ -61,7 +52,16 @@ def filter_table(table, mapping, remove_classes=None, general_case="subst"):
                 row["class"] = mapping["std_subst"]
     for row in rows_to_remove:
         new_table.remove(row)
+    new_table = remove_duplicated(new_table)
     return new_table
+
+def remove_duplicated(table):
+    """Remove duplicated rows on the table."""
+    non_duplic = []
+    for row in table:
+        if row not in non_duplic:
+            non_duplic.append(row)
+    return non_duplic
 
 def mount_count_table(table):
     count_table = {}
@@ -89,6 +89,7 @@ def table_info(table, count_table=None):
 
 
 def remove_dupl_field(dataset_target, dataset_compare, field):
+    """Remove duplicated fields between datasets."""
     row_to_remove = []
     table = dataset_target.table.copy()
     compared_col = [item[field] for item in dataset_compare.table]
