@@ -57,7 +57,9 @@ tg2_COVIDNet/
   - [x] Criar os diretorios requeridos (destino, train/test e *classes*)
   - [x] Copiar imagens a partir do path de origem para path destino
   - [x] Para imagens em formatos não compatíveis com leitura usual, ler e salvá-la em disco no destino correto em ```.png```. Ex.: RSNA possui imagens em ```.dcm```.
-- [ ] Generator para leitura do ```target_dataset```
+- [x] Generator para leitura do ```target_dataset```
 - [ ] Rotina de testes com arqs de redes
-- [ ] Treinamento
+- [x] Treinamento
+- [ ] Montar uma rede custom do zero pra se usar com Autokeras
+- [ ] Leitura dos pesos do Autokeras e validação dos resultados
 - [ ] Rotina de avaliação de resultados de treinamento
