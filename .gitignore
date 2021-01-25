@@ -13,3 +13,9 @@ auto_model/
 checkpoints/
 tensorboard/
 .ipynb_checkpoints/
+
+image_classifier/
+
+example (1).log
+
+__pycache__/
