@@ -1,6 +1,7 @@
 import os
 import random
 import shutil
+import numpy as np
 
 import cv2
 from pydicom import dcmread
@@ -26,8 +27,10 @@ def mount_dataset(dst_path, table):
             image = dcmread(file_path)
             pixel_array_numpy = image.pixel_array
             filename = row["filename"].replace(".dcm", ".png")
-            try:       
-                cv2.imwrite(os.path.join(target_path, filename), pixel_array_numpy)
+            pixel_array_numpy = np.expand_dims(pixel_array_numpy, axis=2)
+            try:
+                cv2.imwrite(os.path.join(target_path, filename),
+                            pixel_array_numpy)
                 count += 1
             except:
                 print(f"Fail trying to write DCM file {filename}")
