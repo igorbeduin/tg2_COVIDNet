@@ -46,11 +46,11 @@ early_stop_callback = tf.keras.callbacks.EarlyStopping(
 
 raw_training_path = os.path.join(training_path, "raw")
 
-for train_method_path in [raw_training_path, augm_training_path]:
-    for subdir in ['models', 'tensorboard']:
-        if not os.path.isdir(os.path.join(train_method_path, subdir)):
-            path = Path(os.path.join(train_method_path, subdir))
-            path.mkdir(parents=True, exist_ok=True)
+train_method_path = raw_training_path
+for subdir in ['models', 'tensorboard']:
+    if not os.path.isdir(os.path.join(train_method_path, subdir)):
+        path = Path(os.path.join(train_method_path, subdir))
+        path.mkdir(parents=True, exist_ok=True)
 
 # raw training
 print("=============== RAW TRAINING ===============")
